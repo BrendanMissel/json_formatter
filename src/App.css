@@ -1,0 +1,237 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, sans-serif;
+  background: #1a1a1a;
+  color: #e0e0e0;
+  height: 100vh;
+}
+
+#root {
+  height: 100%;
+}
+
+.app {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.app-header {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid #333;
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.panes {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+}
+
+.pane {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  border-right: 1px solid #333;
+}
+
+.pane:last-child {
+  border-right: none;
+}
+
+.pane-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 0.75rem;
+  background: #252525;
+  border-bottom: 1px solid #333;
+  gap: 0.5rem;
+}
+
+.pane-title {
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.copy-btn {
+  padding: 0.35rem 0.6rem;
+  font-size: 0.8rem;
+  border: 1px solid #444;
+  background: #333;
+  color: #e0e0e0;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.copy-btn:hover {
+  background: #404040;
+}
+
+.copy-btn.copied {
+  background: #2d5a2d;
+  border-color: #3d7a3d;
+}
+
+.pane-body {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+}
+
+.raw-textarea {
+  width: 100%;
+  height: 100%;
+  min-height: 200px;
+  padding: 0.75rem 1rem;
+  font-family: ui-monospace, monospace;
+  font-size: 13px;
+  line-height: 1.5;
+  background: #1a1a1a;
+  color: #e0e0e0;
+  border: none;
+  resize: none;
+  outline: none;
+}
+
+.raw-textarea::placeholder {
+  color: #666;
+}
+
+.formatted-pre {
+  margin: 0;
+  padding: 0.75rem 1rem;
+  font-family: ui-monospace, monospace;
+  font-size: 13px;
+  line-height: 1.5;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+.parse-error {
+  padding: 0.5rem 0.75rem;
+  margin: 0.5rem 0.75rem;
+  background: #3d2525;
+  border: 1px solid #5a3333;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  color: #f0a0a0;
+}
+
+.mode-toggle {
+  display: flex;
+  gap: 0;
+  border: 1px solid #444;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.mode-toggle button {
+  padding: 0.35rem 0.6rem;
+  font-size: 0.8rem;
+  border: none;
+  background: #333;
+  color: #aaa;
+  cursor: pointer;
+}
+
+.mode-toggle button.active {
+  background: #444;
+  color: #e0e0e0;
+}
+
+.mode-toggle button:not(:last-child) {
+  border-right: 1px solid #444;
+}
+
+.empty-state {
+  padding: 1rem;
+  color: #666;
+  font-size: 0.9rem;
+}
+
+/* Tree view */
+.tree-root {
+  padding: 0.5rem 0;
+}
+
+.tree-node {
+  font-family: ui-monospace, monospace;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.tree-node-inner {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.25rem;
+  padding: 0.15rem 0.5rem;
+  min-height: 1.6em;
+}
+
+.tree-node-inner:hover {
+  background: #252525;
+}
+
+.tree-toggle {
+  width: 1rem;
+  flex-shrink: 0;
+  background: none;
+  border: none;
+  color: #888;
+  cursor: pointer;
+  padding: 0;
+  font-size: 0.7rem;
+  line-height: 1.4;
+}
+
+.tree-key {
+  color: #9cdcfe;
+  flex-shrink: 0;
+  margin-right: 0.25rem;
+}
+
+.tree-key-array {
+  color: #808080;
+}
+
+.tree-value-input {
+  flex: 1;
+  min-width: 0;
+  padding: 0.15rem 0.35rem;
+  font-family: inherit;
+  font-size: inherit;
+  background: #2d2d2d;
+  border: 1px solid #444;
+  border-radius: 3px;
+  color: #e0e0e0;
+  outline: none;
+}
+
+.tree-value-input:focus {
+  border-color: #0e639c;
+}
+
+.tree-value-display {
+  color: #ce9178;
+}
+
+.tree-value-null {
+  color: #569cd6;
+}
+
+.tree-value-bool {
+  color: #569cd6;
+}
+
+.tree-children {
+  padding-left: 1.25rem;
+  border-left: 1px solid #333;
+  margin-left: 0.5rem;
+}
