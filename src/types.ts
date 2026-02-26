@@ -8,4 +8,6 @@ export type JsonValue =
 
 export type FormatMode = 'formatted' | 'tree'
 
+export type AppMode = 'format' | 'diff'
+
 export type TreeEditPath = (string | number)[]

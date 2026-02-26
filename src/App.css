@@ -21,10 +21,50 @@ body {
 }
 
 .app-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
   padding: 0.75rem 1rem;
   border-bottom: 1px solid #333;
   font-weight: 600;
   font-size: 1rem;
+  flex-wrap: wrap;
+}
+
+.app-header-title {
+  flex-shrink: 0;
+}
+
+.app-tabs {
+  display: flex;
+  gap: 0;
+  border: 1px solid #444;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.app-tabs button {
+  padding: 0.35rem 0.75rem;
+  font-size: 0.8rem;
+  border: none;
+  background: #333;
+  color: #aaa;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.app-tabs button:hover {
+  background: #383838;
+  color: #e0e0e0;
+}
+
+.app-tabs button.active {
+  background: #444;
+  color: #e0e0e0;
+}
+
+.app-tabs button:not(:last-child) {
+  border-right: 1px solid #444;
 }
 
 .panes {
@@ -234,4 +274,85 @@ body {
   padding-left: 1.25rem;
   border-left: 1px solid #333;
   margin-left: 0.5rem;
+}
+
+/* JSON Diff view */
+.diff-input-pane {
+  flex: 0 1 25%;
+  min-width: 200px;
+}
+
+.diff-output-pane {
+  flex: 1 1 50%;
+  min-width: 280px;
+}
+
+.diff-output-body {
+  padding: 0;
+}
+
+.diff-pre {
+  margin: 0;
+  padding: 0.75rem 0;
+  font-family: ui-monospace, monospace;
+  font-size: 13px;
+  line-height: 1.5;
+  white-space: pre;
+  overflow-x: auto;
+}
+
+.diff-line {
+  display: grid;
+  grid-template-columns: 2.5em 1fr 2.5em 1fr;
+  min-height: 1.5em;
+  align-items: stretch;
+}
+
+.diff-line-num {
+  padding: 0 0.5rem;
+  background: #252525;
+  color: #666;
+  text-align: right;
+  user-select: none;
+  border-right: 1px solid #333;
+}
+
+.diff-line-num-empty {
+  background: #1e1e1e;
+}
+
+.diff-line-content {
+  padding: 0 0.75rem;
+  white-space: pre;
+  overflow-x: auto;
+}
+
+.diff-line-empty {
+  background: #1a1a1a;
+}
+
+.diff-line-remove .diff-line-content:first-of-type {
+  background: rgba(180, 60, 60, 0.25);
+  color: #f0a0a0;
+}
+
+.diff-line-add .diff-line-content:last-of-type {
+  background: rgba(60, 140, 60, 0.25);
+  color: #90e090;
+}
+
+.diff-line-unchanged .diff-line-content {
+  color: #e0e0e0;
+}
+
+@media (max-width: 900px) {
+  .panes {
+    flex-wrap: wrap;
+  }
+
+  .diff-input-pane,
+  .diff-output-pane {
+    flex: 1 1 100%;
+    min-width: 0;
+  }
 }
