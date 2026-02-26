@@ -21,14 +21,14 @@ function DiffLineRow({ line, lineNumber }: { line: DiffLine; lineNumber: number 
         <span className="diff-line-num" aria-hidden="true">{lineNumber}</span>
         <span className="diff-line-content">{line.left}</span>
         <span className="diff-line-num diff-line-num-empty" aria-hidden="true" />
-        <span className="diff-line-content diff-line-empty" />
+        <span className="diff-line-content diff-line-empty" aria-label="missing in B">—</span>
       </div>
     )
   }
   return (
     <div className="diff-line diff-line-add" data-testid="diff-line-add" role="insertion">
       <span className="diff-line-num diff-line-num-empty" aria-hidden="true" />
-      <span className="diff-line-content diff-line-empty" />
+      <span className="diff-line-content diff-line-empty" aria-label="missing in A">—</span>
       <span className="diff-line-num" aria-hidden="true">{lineNumber}</span>
       <span className="diff-line-content">{line.right}</span>
     </div>

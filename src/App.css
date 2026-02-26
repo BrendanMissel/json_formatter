@@ -328,15 +328,19 @@ body {
 }
 
 .diff-line-empty {
-  background: #1a1a1a;
+  background: rgba(80, 80, 80, 0.2);
+  color: #666;
+  font-style: normal;
 }
 
-.diff-line-remove .diff-line-content:first-of-type {
+/* Left column: content only in A (removed from A’s perspective) */
+.diff-line-remove .diff-line-content:not(.diff-line-empty) {
   background: rgba(180, 60, 60, 0.25);
   color: #f0a0a0;
 }
 
-.diff-line-add .diff-line-content:last-of-type {
+/* Right column: content only in B (added from B’s perspective) */
+.diff-line-add .diff-line-content:not(.diff-line-empty) {
   background: rgba(60, 140, 60, 0.25);
   color: #90e090;
 }
