@@ -18,17 +18,52 @@ export default function RawInputPane({ rawString, setRawString }: RawInputPanePr
     }
   }
 
+  const handlePaste = async () => {
+    try {
+      const text = await navigator.clipboard.readText()
+      setRawString(text)
+    } catch {
+      // ignore permission or other errors
+    }
+  }
+
+  const handleClear = () => {
+    setRawString('')
+  }
+
   return (
     <div className="pane">
       <div className="pane-header">
         <span className="pane-title">Input (raw JSON)</span>
-        <button
-          type="button"
-          className={`copy-btn ${copied ? 'copied' : ''}`}
-          onClick={handleCopy}
-        >
-          {copied ? 'Copied!' : 'Copy'}
-        </button>
+        <div className="pane-action-buttons">
+          <button
+            type="button"
+            className={`pane-action-btn copy-btn ${copied ? 'copied' : ''}`}
+            onClick={handleCopy}
+            aria-label={copied ? 'Copied!' : 'Copy'}
+            title="Copy"
+          >
+            <i className="fa-solid fa-copy" aria-hidden="true" />
+          </button>
+          <button
+            type="button"
+            className="pane-action-btn"
+            onClick={handlePaste}
+            aria-label="Paste"
+            title="Paste"
+          >
+            <i className="fa-solid fa-paste" aria-hidden="true" />
+          </button>
+          <button
+            type="button"
+            className="pane-action-btn"
+            onClick={handleClear}
+            aria-label="Clear"
+            title="Clear"
+          >
+            <i className="fa-solid fa-eraser" aria-hidden="true" />
+          </button>
+        </div>
       </div>
       <div className="pane-body">
         <textarea

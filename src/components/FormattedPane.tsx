@@ -55,11 +55,13 @@ export default function FormattedPane({
           </div>
           <button
             type="button"
-            className={`copy-btn ${copied ? 'copied' : ''}`}
+            className={`pane-action-btn copy-btn ${copied ? 'copied' : ''}`}
             onClick={handleCopyFormatted}
             disabled={parsed === null}
+            aria-label={copied ? 'Copied!' : 'Copy'}
+            title="Copy"
           >
-            {copied ? 'Copied!' : 'Copy'}
+            <i className="fa-solid fa-copy" aria-hidden="true" />
           </button>
         </div>
       </div>

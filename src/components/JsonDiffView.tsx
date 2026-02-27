@@ -48,6 +48,8 @@ function DiffLineRow({ line, lineNumber }: { line: DiffLine; lineNumber: number 
 export default function JsonDiffView() {
   const [leftInput, setLeftInput] = useState(DEFAULT_LEFT)
   const [rightInput, setRightInput] = useState(DEFAULT_RIGHT)
+  const [leftCopied, setLeftCopied] = useState(false)
+  const [rightCopied, setRightCopied] = useState(false)
 
   const leftParse = useMemo(() => tryParseAndNormalize(leftInput), [leftInput])
   const rightParse = useMemo(() => tryParseAndNormalize(rightInput), [rightInput])
@@ -59,11 +61,78 @@ export default function JsonDiffView() {
 
   const showDiff = leftParse && !('error' in leftParse) && rightParse && !('error' in rightParse)
 
+  const handleCopyLeft = async () => {
+    try {
+      await navigator.clipboard.writeText(leftInput)
+      setLeftCopied(true)
+      setTimeout(() => setLeftCopied(false), 2000)
+    } catch {
+      // ignore
+    }
+  }
+
+  const handleCopyRight = async () => {
+    try {
+      await navigator.clipboard.writeText(rightInput)
+      setRightCopied(true)
+      setTimeout(() => setRightCopied(false), 2000)
+    } catch {
+      // ignore
+    }
+  }
+
+  const handlePasteLeft = async () => {
+    try {
+      const text = await navigator.clipboard.readText()
+      setLeftInput(text)
+    } catch {
+      // ignore
+    }
+  }
+
+  const handlePasteRight = async () => {
+    try {
+      const text = await navigator.clipboard.readText()
+      setRightInput(text)
+    } catch {
+      // ignore
+    }
+  }
+
   return (
     <>
       <div className="pane diff-input-pane" aria-label="JSON A">
         <div className="pane-header">
           <span className="pane-title">JSON A</span>
+          <div className="pane-action-buttons">
+            <button
+              type="button"
+              className={`pane-action-btn copy-btn ${leftCopied ? 'copied' : ''}`}
+              onClick={handleCopyLeft}
+              aria-label={leftCopied ? 'Copied!' : 'Copy'}
+              title="Copy"
+            >
+              <i className="fa-solid fa-copy" aria-hidden="true" />
+            </button>
+            <button
+              type="button"
+              className="pane-action-btn"
+              onClick={handlePasteLeft}
+              aria-label="Paste"
+              title="Paste"
+            >
+              <i className="fa-solid fa-paste" aria-hidden="true" />
+            </button>
+            <button
+              type="button"
+              className="pane-action-btn"
+              onClick={() => setLeftInput('')}
+              aria-label="Clear"
+              title="Clear"
+            >
+              <i className="fa-solid fa-eraser" aria-hidden="true" />
+            </button>
+          </div>
         </div>
         <div className="pane-body">
           {'error' in leftParse && (
@@ -82,6 +151,35 @@ export default function JsonDiffView() {
       <div className="pane diff-input-pane" aria-label="JSON B">
         <div className="pane-header">
           <span className="pane-title">JSON B</span>
+          <div className="pane-action-buttons">
+            <button
+              type="button"
+              className={`pane-action-btn copy-btn ${rightCopied ? 'copied' : ''}`}
+              onClick={handleCopyRight}
+              aria-label={rightCopied ? 'Copied!' : 'Copy'}
+              title="Copy"
+            >
+              <i className="fa-solid fa-copy" aria-hidden="true" />
+            </button>
+            <button
+              type="button"
+              className="pane-action-btn"
+              onClick={handlePasteRight}
+              aria-label="Paste"
+              title="Paste"
+            >
+              <i className="fa-solid fa-paste" aria-hidden="true" />
+            </button>
+            <button
+              type="button"
+              className="pane-action-btn"
+              onClick={() => setRightInput('')}
+              aria-label="Clear"
+              title="Clear"
+            >
+              <i className="fa-solid fa-eraser" aria-hidden="true" />
+            </button>
+          </div>
         </div>
         <div className="pane-body">
           {'error' in rightParse && (
