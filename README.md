@@ -44,7 +44,7 @@ To run locally, see [Getting Started](#getting-started).
 ## Getting Started
 
 ### Prerequisites
-- Node.js (>=20)
+- Node.js (>=24)
 - npm or yarn
 
 ### Install Dependencies
