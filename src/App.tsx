@@ -4,6 +4,7 @@ import type { JsonValue, FormatMode, AppMode, TreeEditPath } from './types'
 import RawInputPane from './components/RawInputPane'
 import FormattedPane from './components/FormattedPane'
 import JsonDiffView from './components/JsonDiffView'
+import githubIconUrl from './media/GitHub_Invertocat_White_Clearspace.svg'
 
 const DEFAULT_RAW = '{\n  "example": true,\n  "count": 42\n}\n'
 const DEBOUNCE_MS = 350
@@ -73,7 +74,7 @@ export default function App() {
   return (
     <div className="app">
       <header className="app-header">
-        <span className="app-header-title">JSON Formatter</span>
+        <span className="app-header-title">JSON Tools</span>
         <div className="app-tabs" role="tablist" aria-label="App mode">
           <button
             type="button"
@@ -97,6 +98,17 @@ export default function App() {
           >
             JSON Diff
           </button>
+        </div>
+        <div className="app-header-github">
+          <a
+            href="https://github.com/BrendanMissel/json_formatter"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="View repository on GitHub"
+            className="github-link"
+          >
+            <img src={githubIconUrl} alt="" width={24} height={24} aria-hidden="true" />
+          </a>
         </div>
       </header>
       {appMode === 'format' && (
