@@ -1,8 +1,8 @@
-import { useState, useMemo } from 'react'
-import { diffJsonStrings, tryParseAndNormalize, type DiffLine } from '../utils/diffJson'
+import { useState, useMemo } from 'react';
+import { diffJsonStrings, tryParseAndNormalize, type DiffLine } from '../utils/diffJson';
 
-const DEFAULT_LEFT = '{\n  "name": "foo",\n  "count": 1\n}'
-const DEFAULT_RIGHT = '{\n  "name": "bar",\n  "count": 2,\n  "active": true\n}'
+const DEFAULT_LEFT = '{\n  "name": "foo",\n  "count": 1\n}';
+const DEFAULT_RIGHT = '{\n  "name": "bar",\n  "count": 2,\n  "active": true\n}';
 
 function DiffLineRow({ line, lineNumber }: { line: DiffLine; lineNumber: number }) {
   if (line.type === 'unchanged') {
@@ -13,7 +13,7 @@ function DiffLineRow({ line, lineNumber }: { line: DiffLine; lineNumber: number 
         <span className="diff-line-num" aria-hidden="true">{lineNumber}</span>
         <span className="diff-line-content">{line.right}</span>
       </div>
-    )
+    );
   }
   if (line.type === 'changed') {
     return (
@@ -23,7 +23,7 @@ function DiffLineRow({ line, lineNumber }: { line: DiffLine; lineNumber: number 
         <span className="diff-line-num" aria-hidden="true">{lineNumber}</span>
         <span className="diff-line-content">{line.right}</span>
       </div>
-    )
+    );
   }
   if (line.type === 'remove') {
     return (
@@ -33,7 +33,7 @@ function DiffLineRow({ line, lineNumber }: { line: DiffLine; lineNumber: number 
         <span className="diff-line-num diff-line-num-empty" aria-hidden="true" />
         <span className="diff-line-content diff-line-empty" aria-label="missing in B">—</span>
       </div>
-    )
+    );
   }
   return (
     <div className="diff-line diff-line-add" data-testid="diff-line-add" role="insertion">
@@ -42,62 +42,62 @@ function DiffLineRow({ line, lineNumber }: { line: DiffLine; lineNumber: number 
       <span className="diff-line-num" aria-hidden="true">{lineNumber}</span>
       <span className="diff-line-content">{line.right}</span>
     </div>
-  )
+  );
 }
 
 export default function JsonDiffView() {
-  const [leftInput, setLeftInput] = useState(DEFAULT_LEFT)
-  const [rightInput, setRightInput] = useState(DEFAULT_RIGHT)
-  const [leftCopied, setLeftCopied] = useState(false)
-  const [rightCopied, setRightCopied] = useState(false)
+  const [leftInput, setLeftInput] = useState(DEFAULT_LEFT);
+  const [rightInput, setRightInput] = useState(DEFAULT_RIGHT);
+  const [leftCopied, setLeftCopied] = useState(false);
+  const [rightCopied, setRightCopied] = useState(false);
 
-  const leftParse = useMemo(() => tryParseAndNormalize(leftInput), [leftInput])
-  const rightParse = useMemo(() => tryParseAndNormalize(rightInput), [rightInput])
+  const leftParse = useMemo(() => tryParseAndNormalize(leftInput), [leftInput]);
+  const rightParse = useMemo(() => tryParseAndNormalize(rightInput), [rightInput]);
 
   const diffResult = useMemo(
     () => diffJsonStrings(leftInput, rightInput),
     [leftInput, rightInput]
-  )
+  );
 
-  const showDiff = leftParse && !('error' in leftParse) && rightParse && !('error' in rightParse)
+  const showDiff = leftParse && !('error' in leftParse) && rightParse && !('error' in rightParse);
 
   const handleCopyLeft = async () => {
     try {
-      await navigator.clipboard.writeText(leftInput)
-      setLeftCopied(true)
-      setTimeout(() => setLeftCopied(false), 2000)
+      await navigator.clipboard.writeText(leftInput);
+      setLeftCopied(true);
+      setTimeout(() => setLeftCopied(false), 2000);
     } catch {
       // ignore
     }
-  }
+  };
 
   const handleCopyRight = async () => {
     try {
-      await navigator.clipboard.writeText(rightInput)
-      setRightCopied(true)
-      setTimeout(() => setRightCopied(false), 2000)
+      await navigator.clipboard.writeText(rightInput);
+      setRightCopied(true);
+      setTimeout(() => setRightCopied(false), 2000);
     } catch {
       // ignore
     }
-  }
+  };
 
   const handlePasteLeft = async () => {
     try {
-      const text = await navigator.clipboard.readText()
-      setLeftInput(text)
+      const text = await navigator.clipboard.readText();
+      setLeftInput(text);
     } catch {
       // ignore
     }
-  }
+  };
 
   const handlePasteRight = async () => {
     try {
-      const text = await navigator.clipboard.readText()
-      setRightInput(text)
+      const text = await navigator.clipboard.readText();
+      setRightInput(text);
     } catch {
       // ignore
     }
-  }
+  };
 
   return (
     <>
@@ -218,5 +218,5 @@ export default function JsonDiffView() {
         </div>
       </div>
     </>
-  )
+  );
 }

@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState } from 'react';
 
 type RawInputPaneProps = {
   rawString: string
@@ -6,30 +6,30 @@ type RawInputPaneProps = {
 }
 
 export default function RawInputPane({ rawString, setRawString }: RawInputPaneProps) {
-  const [copied, setCopied] = useState(false)
+  const [copied, setCopied] = useState(false);
 
   const handleCopy = async () => {
     try {
-      await navigator.clipboard.writeText(rawString)
-      setCopied(true)
-      setTimeout(() => setCopied(false), 2000)
+      await navigator.clipboard.writeText(rawString);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
     } catch {
       // ignore
     }
-  }
+  };
 
   const handlePaste = async () => {
     try {
-      const text = await navigator.clipboard.readText()
-      setRawString(text)
+      const text = await navigator.clipboard.readText();
+      setRawString(text);
     } catch {
       // ignore permission or other errors
     }
-  }
+  };
 
   const handleClear = () => {
-    setRawString('')
-  }
+    setRawString('');
+  };
 
   return (
     <div className="pane">
@@ -75,5 +75,5 @@ export default function RawInputPane({ rawString, setRawString }: RawInputPanePr
         />
       </div>
     </div>
-  )
+  );
 }
