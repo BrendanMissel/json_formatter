@@ -1,7 +1,7 @@
-import { useState } from 'react'
-import type { JsonValue, FormatMode, TreeEditPath } from '../types'
-import FormattedJsonView from './FormattedJsonView'
-import JsonTreeView from './JsonTreeView'
+import { useState } from 'react';
+import type { JsonValue, FormatMode, TreeEditPath } from '../types';
+import FormattedJsonView from './FormattedJsonView';
+import JsonTreeView from './JsonTreeView';
 
 type FormattedPaneProps = {
   parsed: JsonValue | null
@@ -18,19 +18,19 @@ export default function FormattedPane({
   setFormatMode,
   onTreeEdit,
 }: FormattedPaneProps) {
-  const [copied, setCopied] = useState(false)
+  const [copied, setCopied] = useState(false);
 
-  const formattedString = parsed === null ? '' : JSON.stringify(parsed, null, 2)
+  const formattedString = parsed === null ? '' : JSON.stringify(parsed, null, 2);
 
   const handleCopyFormatted = async () => {
     try {
-      await navigator.clipboard.writeText(formattedString)
-      setCopied(true)
-      setTimeout(() => setCopied(false), 2000)
+      await navigator.clipboard.writeText(formattedString);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
     } catch {
       // ignore
     }
-  }
+  };
 
   return (
     <div className="pane">
@@ -73,5 +73,5 @@ export default function FormattedPane({
         )}
       </div>
     </div>
-  )
+  );
 }

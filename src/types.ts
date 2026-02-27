@@ -4,10 +4,10 @@ export type JsonValue =
   | boolean
   | null
   | JsonValue[]
-  | { [key: string]: JsonValue }
+  | { [key: string]: JsonValue };
 
-export type FormatMode = 'formatted' | 'tree'
+export type FormatMode = 'formatted' | 'tree';
 
-export type AppMode = 'format' | 'diff'
+export type AppMode = 'format' | 'diff';
 
-export type TreeEditPath = (string | number)[]
+export type TreeEditPath = (string | number)[];
