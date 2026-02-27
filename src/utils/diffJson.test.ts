@@ -59,16 +59,15 @@ describe('diffJsonStrings', () => {
     }
   })
 
-  it('highlights changed value line', () => {
+  it('shows same key different value as changed line (one row, both sides)', () => {
     const left = '{"name": "foo"}'
     const right = '{"name": "bar"}'
     const result = diffJsonStrings(left, right)
     expect(result.kind).toBe('ok')
     if (result.kind === 'ok') {
-      const removeLines = result.lines.filter((l) => l.type === 'remove')
-      const addLines = result.lines.filter((l) => l.type === 'add')
-      expect(removeLines.some((l) => l.type === 'remove' && l.left.includes('foo'))).toBe(true)
-      expect(addLines.some((l) => l.type === 'add' && l.right.includes('bar'))).toBe(true)
+      const changedLines = result.lines.filter((l) => l.type === 'changed')
+      expect(changedLines.length).toBeGreaterThan(0)
+      expect(changedLines.some((l) => l.type === 'changed' && l.left.includes('foo') && l.right.includes('bar'))).toBe(true)
     }
   })
 })

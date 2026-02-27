@@ -14,7 +14,7 @@ describe('JsonDiffView', () => {
     expect(screen.getByRole('region', { name: /JSON diff result/i })).toBeInTheDocument()
   })
 
-  it('shows diff output with add/remove lines when both inputs are valid and different', () => {
+  it('shows diff output when both inputs are valid and different', () => {
     render(<JsonDiffView />)
     const leftInput = screen.getByRole('textbox', { name: /JSON A input/i })
     const rightInput = screen.getByRole('textbox', { name: /JSON B input/i })
@@ -22,9 +22,23 @@ describe('JsonDiffView', () => {
     fireEvent.change(rightInput, { target: { value: '{"a": 2, "b": 3}' } })
     const diffOutput = screen.getByTestId('diff-output')
     expect(diffOutput).toBeInTheDocument()
-    const removeLines = screen.getAllByTestId('diff-line-remove')
-    const addLines = screen.getAllByTestId('diff-line-add')
-    expect(removeLines.length + addLines.length).toBeGreaterThan(0)
+    const removeLines = screen.queryAllByTestId('diff-line-remove')
+    const addLines = screen.queryAllByTestId('diff-line-add')
+    const changedLines = screen.queryAllByTestId('diff-line-changed')
+    expect(removeLines.length + addLines.length + changedLines.length).toBeGreaterThan(0)
+  })
+
+  it('shows same key different value on one row with both sides highlighted', () => {
+    render(<JsonDiffView />)
+    const leftInput = screen.getByRole('textbox', { name: /JSON A input/i })
+    const rightInput = screen.getByRole('textbox', { name: /JSON B input/i })
+    fireEvent.change(leftInput, { target: { value: '{"name": "foo", "id": 1}' } })
+    fireEvent.change(rightInput, { target: { value: '{"name": "bar", "id": 1}' } })
+    const changedLines = screen.getAllByTestId('diff-line-changed')
+    expect(changedLines.length).toBeGreaterThan(0)
+    const diffOutput = screen.getByTestId('diff-output')
+    expect(diffOutput.textContent).toMatch(/"name": "foo"/)
+    expect(diffOutput.textContent).toMatch(/"name": "bar"/)
   })
 
   it('shows only unchanged lines when both inputs are the same', () => {

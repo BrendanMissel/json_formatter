@@ -15,6 +15,16 @@ function DiffLineRow({ line, lineNumber }: { line: DiffLine; lineNumber: number 
       </div>
     )
   }
+  if (line.type === 'changed') {
+    return (
+      <div className="diff-line diff-line-changed" data-testid="diff-line-changed" role="status" aria-label="Same key, different value">
+        <span className="diff-line-num" aria-hidden="true">{lineNumber}</span>
+        <span className="diff-line-content">{line.left}</span>
+        <span className="diff-line-num" aria-hidden="true">{lineNumber}</span>
+        <span className="diff-line-content">{line.right}</span>
+      </div>
+    )
+  }
   if (line.type === 'remove') {
     return (
       <div className="diff-line diff-line-remove" data-testid="diff-line-remove" role="deletion">

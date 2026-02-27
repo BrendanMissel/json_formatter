@@ -345,6 +345,11 @@ body {
   color: #90e090;
 }
 
+.diff-line-changed .diff-line-content {
+  background: rgba(180, 120, 40, 0.3);
+  color: #e8c070;
+}
+
 .diff-line-unchanged .diff-line-content {
   color: #e0e0e0;
 }
