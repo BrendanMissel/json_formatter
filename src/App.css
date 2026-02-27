@@ -144,6 +144,32 @@ body {
   border-color: #3d7a3d;
 }
 
+.pane-action-buttons {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.pane-action-btn {
+  padding: 0.35rem 0.5rem;
+  font-size: 0.8rem;
+  border: 1px solid #444;
+  background: #333;
+  color: #e0e0e0;
+  border-radius: 4px;
+  cursor: pointer;
+  min-width: 2rem;
+}
+
+.pane-action-btn:hover:not(:disabled) {
+  background: #404040;
+}
+
+.pane-action-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
 .pane-body {
   flex: 1;
   min-height: 0;
