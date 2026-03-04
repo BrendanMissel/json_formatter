@@ -43,7 +43,7 @@ export default function FormattedPane({
               className={formatMode === 'formatted' ? 'active' : ''}
               onClick={() => setFormatMode('formatted')}
             >
-              Formatted JSON
+              Formatted
             </button>
             <button
               type="button"

@@ -1,8 +1,8 @@
 import { useState, useMemo } from 'react';
 import { diffJsonStrings, tryParseAndNormalize, type DiffLine } from '../utils/diffJson';
 
-const DEFAULT_LEFT = '{\n  "name": "foo",\n  "count": 1\n}';
-const DEFAULT_RIGHT = '{\n  "name": "bar",\n  "count": 2,\n  "active": true\n}';
+const DEFAULT_LEFT = '{\n  "name": "foo",\n  "count": 1,\n  "type": "new"\n}';
+const DEFAULT_RIGHT = '{\n  "name": "bar",\n  "count": 1,\n  "active": true\n}';
 
 function DiffLineRow({ line, lineNumber }: { line: DiffLine; lineNumber: number }) {
   if (line.type === 'unchanged') {
@@ -83,9 +83,9 @@ export default function JsonDiffView() {
 
   return (
     <>
-      <div className="pane diff-input-pane" aria-label="JSON A">
+      <div className="pane diff-input-pane" aria-label="A Input">
         <div className="pane-header">
-          <span className="pane-title">JSON A</span>
+          <span className="pane-title">A</span>
           <div className="pane-action-buttons">
             <button
               type="button"
@@ -117,13 +117,13 @@ export default function JsonDiffView() {
             value={leftInput}
             onChange={(e) => setLeftInput(e.target.value)}
             spellCheck={false}
-            aria-label="JSON A input"
+            aria-label="A Input"
           />
         </div>
       </div>
-      <div className="pane diff-input-pane" aria-label="JSON B">
+      <div className="pane diff-input-pane" aria-label="B Input">
         <div className="pane-header">
-          <span className="pane-title">JSON B</span>
+          <span className="pane-title">B</span>
           <div className="pane-action-buttons">
             <button
               type="button"
@@ -155,7 +155,7 @@ export default function JsonDiffView() {
             value={rightInput}
             onChange={(e) => setRightInput(e.target.value)}
             spellCheck={false}
-            aria-label="JSON B input"
+            aria-label="B Input"
           />
         </div>
       </div>
@@ -166,7 +166,7 @@ export default function JsonDiffView() {
         <div className="pane-body diff-output-body">
           {!showDiff && diffResult.kind === 'parseError' && (
             <div className="parse-error" role="alert">
-              {diffResult.side === 'left' ? 'JSON A: ' : 'JSON B: '}{diffResult.message}
+              {diffResult.side === 'left' ? 'A: ' : 'B: '}{diffResult.message}
             </div>
           )}
           {showDiff && diffResult.kind === 'ok' && (

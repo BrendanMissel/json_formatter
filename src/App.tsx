@@ -96,7 +96,7 @@ export default function App() {
             className={appMode === 'diff' ? 'active' : ''}
             onClick={() => setAppMode('diff')}
           >
-            JSON Diff
+            Diff
           </button>
         </div>
         <div className="app-header-github">
@@ -124,7 +124,7 @@ export default function App() {
         </div>
       )}
       {appMode === 'diff' && (
-        <div className="panes" id="diff-panel" role="tabpanel" aria-labelledby="diff-tab">
+        <div className="panes diff-panes" id="diff-panel" role="tabpanel" aria-labelledby="diff-tab">
           <JsonDiffView />
         </div>
       )}
