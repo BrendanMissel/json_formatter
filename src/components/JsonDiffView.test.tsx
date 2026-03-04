@@ -19,9 +19,9 @@ describe('JsonDiffView', () => {
     expect(clearButtons).toHaveLength(2);
   });
 
-  it('Clear in JSON A clears the JSON A textarea', () => {
+  it('Clear in A clears the  A textarea', () => {
     render(<JsonDiffView />);
-    const jsonAInput = screen.getByRole('textbox', { name: /JSON A input/i });
+    const jsonAInput = screen.getByRole('textbox', { name: /A Input/i });
     const clearButtons = screen.getAllByRole('button', { name: /clear/i });
 
     fireEvent.click(clearButtons[0]);
@@ -29,9 +29,9 @@ describe('JsonDiffView', () => {
     expect(jsonAInput).toHaveValue('');
   });
 
-  it('Clear in JSON B clears the JSON B textarea', () => {
+  it('Clear in B clears theB textarea', () => {
     render(<JsonDiffView />);
-    const jsonBInput = screen.getByRole('textbox', { name: /JSON B input/i });
+    const jsonBInput = screen.getByRole('textbox', { name: /B Input/i });
     const clearButtons = screen.getAllByRole('button', { name: /clear/i });
 
     fireEvent.click(clearButtons[1]);
@@ -39,10 +39,10 @@ describe('JsonDiffView', () => {
     expect(jsonBInput).toHaveValue('');
   });
 
-  it('renders JSON A and JSON B input areas', () => {
+  it('renders A and B input areas', () => {
     render(<JsonDiffView />);
-    expect(screen.getByRole('textbox', { name: /JSON A input/i })).toBeInTheDocument();
-    expect(screen.getByRole('textbox', { name: /JSON B input/i })).toBeInTheDocument();
+    expect(screen.getByRole('textbox', { name: /A Input/i })).toBeInTheDocument();
+    expect(screen.getByRole('textbox', { name: /B Input/i })).toBeInTheDocument();
   });
 
   it('renders diff output region', () => {
@@ -52,8 +52,8 @@ describe('JsonDiffView', () => {
 
   it('shows diff output when both inputs are valid and different', () => {
     render(<JsonDiffView />);
-    const leftInput = screen.getByRole('textbox', { name: /JSON A input/i });
-    const rightInput = screen.getByRole('textbox', { name: /JSON B input/i });
+    const leftInput = screen.getByRole('textbox', { name: /A Input/i });
+    const rightInput = screen.getByRole('textbox', { name: /B Input/i });
     fireEvent.change(leftInput, { target: { value: '{"a": 1}' } });
     fireEvent.change(rightInput, { target: { value: '{"a": 2, "b": 3}' } });
     const diffOutput = screen.getByTestId('diff-output');
@@ -66,8 +66,8 @@ describe('JsonDiffView', () => {
 
   it('shows same key different value on one row with both sides highlighted', () => {
     render(<JsonDiffView />);
-    const leftInput = screen.getByRole('textbox', { name: /JSON A input/i });
-    const rightInput = screen.getByRole('textbox', { name: /JSON B input/i });
+    const leftInput = screen.getByRole('textbox', { name: /A Input/i });
+    const rightInput = screen.getByRole('textbox', { name: /B Input/i });
     fireEvent.change(leftInput, { target: { value: '{"name": "foo", "id": 1}' } });
     fireEvent.change(rightInput, { target: { value: '{"name": "bar", "id": 1}' } });
     const changedLines = screen.getAllByTestId('diff-line-changed');
@@ -79,8 +79,8 @@ describe('JsonDiffView', () => {
 
   it('shows only unchanged lines when both inputs are the same', () => {
     render(<JsonDiffView />);
-    const leftInput = screen.getByRole('textbox', { name: /JSON A input/i });
-    const rightInput = screen.getByRole('textbox', { name: /JSON B input/i });
+    const leftInput = screen.getByRole('textbox', { name: /A Input/i });
+    const rightInput = screen.getByRole('textbox', { name: /B Input/i });
     const same = '{"x": 1}';
     fireEvent.change(leftInput, { target: { value: same } });
     fireEvent.change(rightInput, { target: { value: same } });
@@ -92,7 +92,7 @@ describe('JsonDiffView', () => {
 
   it('shows parse error when left JSON is invalid', () => {
     render(<JsonDiffView />);
-    const leftInput = screen.getByRole('textbox', { name: /JSON A input/i });
+    const leftInput = screen.getByRole('textbox', { name: /A Input/i });
     fireEvent.change(leftInput, { target: { value: '{ invalid }' } });
     const alerts = screen.getAllByRole('alert');
     expect(alerts.length).toBeGreaterThanOrEqual(1);
