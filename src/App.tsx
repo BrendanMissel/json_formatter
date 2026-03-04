@@ -96,7 +96,7 @@ export default function App() {
             className={appMode === 'diff' ? 'active' : ''}
             onClick={() => setAppMode('diff')}
           >
-            JSON Diff
+            Diff
           </button>
         </div>
         <div className="app-header-github">
