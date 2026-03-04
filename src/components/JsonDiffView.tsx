@@ -81,24 +81,6 @@ export default function JsonDiffView() {
     }
   };
 
-  const handlePasteLeft = async () => {
-    try {
-      const text = await navigator.clipboard.readText();
-      setLeftInput(text);
-    } catch {
-      // ignore
-    }
-  };
-
-  const handlePasteRight = async () => {
-    try {
-      const text = await navigator.clipboard.readText();
-      setRightInput(text);
-    } catch {
-      // ignore
-    }
-  };
-
   return (
     <>
       <div className="pane diff-input-pane" aria-label="JSON A">
@@ -113,15 +95,6 @@ export default function JsonDiffView() {
               title="Copy"
             >
               <i className="fa-solid fa-copy" aria-hidden="true" />
-            </button>
-            <button
-              type="button"
-              className="pane-action-btn"
-              onClick={handlePasteLeft}
-              aria-label="Paste"
-              title="Paste"
-            >
-              <i className="fa-solid fa-paste" aria-hidden="true" />
             </button>
             <button
               type="button"
@@ -160,15 +133,6 @@ export default function JsonDiffView() {
               title="Copy"
             >
               <i className="fa-solid fa-copy" aria-hidden="true" />
-            </button>
-            <button
-              type="button"
-              className="pane-action-btn"
-              onClick={handlePasteRight}
-              aria-label="Paste"
-              title="Paste"
-            >
-              <i className="fa-solid fa-paste" aria-hidden="true" />
             </button>
             <button
               type="button"
