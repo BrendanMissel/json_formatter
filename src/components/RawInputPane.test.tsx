@@ -9,7 +9,7 @@ describe('RawInputPane', () => {
     setRawString.mockClear();
     vi.stubGlobal('navigator', {
       clipboard: {
-        writeText: vi.fn().mockResolvedValue(undefined),
+        writeText: vi.fn().mockResolvedValue(undefined)
       },
     });
   });
