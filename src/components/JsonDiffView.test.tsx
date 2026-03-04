@@ -11,7 +11,7 @@ describe('JsonDiffView', () => {
     });
   });
 
-  it('renders Copy and Clear buttons for JSON A and JSON B', () => {
+  it('renders Copy and Clear buttons for A and B', () => {
     render(<JsonDiffView />);
     const copyButtons = screen.getAllByRole('button', { name: /copy/i });
     const clearButtons = screen.getAllByRole('button', { name: /clear/i });
@@ -19,7 +19,7 @@ describe('JsonDiffView', () => {
     expect(clearButtons).toHaveLength(2);
   });
 
-  it('Clear in A clears the  A textarea', () => {
+  it('Clear in A clears the A textarea', () => {
     render(<JsonDiffView />);
     const jsonAInput = screen.getByRole('textbox', { name: /A Input/i });
     const clearButtons = screen.getAllByRole('button', { name: /clear/i });
@@ -29,7 +29,7 @@ describe('JsonDiffView', () => {
     expect(jsonAInput).toHaveValue('');
   });
 
-  it('Clear in B clears theB textarea', () => {
+  it('Clear in B clears the B textarea', () => {
     render(<JsonDiffView />);
     const jsonBInput = screen.getByRole('textbox', { name: /B Input/i });
     const clearButtons = screen.getAllByRole('button', { name: /clear/i });
