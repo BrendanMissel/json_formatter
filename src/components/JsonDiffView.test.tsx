@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import JsonDiffView from './JsonDiffView';
 
 describe('JsonDiffView', () => {
@@ -7,51 +7,16 @@ describe('JsonDiffView', () => {
     vi.stubGlobal('navigator', {
       clipboard: {
         writeText: vi.fn().mockResolvedValue(undefined),
-        readText: vi.fn().mockResolvedValue(''),
       },
     });
   });
 
-  it('renders Copy, Paste, and Clear buttons for JSON A and JSON B', () => {
+  it('renders Copy and Clear buttons for JSON A and JSON B', () => {
     render(<JsonDiffView />);
     const copyButtons = screen.getAllByRole('button', { name: /copy/i });
-    const pasteButtons = screen.getAllByRole('button', { name: /paste/i });
     const clearButtons = screen.getAllByRole('button', { name: /clear/i });
     expect(copyButtons).toHaveLength(2);
-    expect(pasteButtons).toHaveLength(2);
     expect(clearButtons).toHaveLength(2);
-  });
-
-  it('Paste in JSON A updates the JSON A textarea', async () => {
-    const pasted = '{"pasted": "into A"}';
-    vi.stubGlobal('navigator', {
-      clipboard: { readText: vi.fn().mockResolvedValue(pasted), writeText: vi.fn() },
-    });
-    render(<JsonDiffView />);
-    const pasteButtons = screen.getAllByRole('button', { name: /paste/i });
-    const jsonAInput = screen.getByRole('textbox', { name: /JSON A input/i });
-
-    fireEvent.click(pasteButtons[0]);
-
-    await waitFor(() => {
-      expect(jsonAInput).toHaveValue(pasted);
-    });
-  });
-
-  it('Paste in JSON B updates the JSON B textarea', async () => {
-    const pasted = '{"pasted": "into B"}';
-    vi.stubGlobal('navigator', {
-      clipboard: { readText: vi.fn().mockResolvedValue(pasted), writeText: vi.fn() },
-    });
-    render(<JsonDiffView />);
-    const pasteButtons = screen.getAllByRole('button', { name: /paste/i });
-    const jsonBInput = screen.getByRole('textbox', { name: /JSON B input/i });
-
-    fireEvent.click(pasteButtons[1]);
-
-    await waitFor(() => {
-      expect(jsonBInput).toHaveValue(pasted);
-    });
   });
 
   it('Clear in JSON A clears the JSON A textarea', () => {

@@ -18,15 +18,6 @@ export default function RawInputPane({ rawString, setRawString }: RawInputPanePr
     }
   };
 
-  const handlePaste = async () => {
-    try {
-      const text = await navigator.clipboard.readText();
-      setRawString(text);
-    } catch {
-      // ignore permission or other errors
-    }
-  };
-
   const handleClear = () => {
     setRawString('');
   };
@@ -44,15 +35,6 @@ export default function RawInputPane({ rawString, setRawString }: RawInputPanePr
             title="Copy"
           >
             <i className="fa-solid fa-copy" aria-hidden="true" />
-          </button>
-          <button
-            type="button"
-            className="pane-action-btn"
-            onClick={handlePaste}
-            aria-label="Paste"
-            title="Paste"
-          >
-            <i className="fa-solid fa-paste" aria-hidden="true" />
           </button>
           <button
             type="button"
