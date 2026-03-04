@@ -83,9 +83,9 @@ export default function JsonDiffView() {
 
   return (
     <>
-      <div className="pane diff-input-pane" aria-label="Left">
+      <div className="pane diff-input-pane" aria-label="A Input">
         <div className="pane-header">
-          <span className="pane-title">Left</span>
+          <span className="pane-title">A</span>
           <div className="pane-action-buttons">
             <button
               type="button"
@@ -117,13 +117,13 @@ export default function JsonDiffView() {
             value={leftInput}
             onChange={(e) => setLeftInput(e.target.value)}
             spellCheck={false}
-            aria-label="Left input"
+            aria-label="A Input"
           />
         </div>
       </div>
-      <div className="pane diff-input-pane" aria-label="Right">
+      <div className="pane diff-input-pane" aria-label="B Input">
         <div className="pane-header">
-          <span className="pane-title">Right</span>
+          <span className="pane-title">B</span>
           <div className="pane-action-buttons">
             <button
               type="button"
@@ -155,18 +155,18 @@ export default function JsonDiffView() {
             value={rightInput}
             onChange={(e) => setRightInput(e.target.value)}
             spellCheck={false}
-            aria-label="Right input"
+            aria-label="B Input"
           />
         </div>
       </div>
       <div className="pane diff-output-pane" role="region" aria-label="JSON diff result">
         <div className="pane-header">
-          <span className="pane-title">Diff (Left → Right)</span>
+          <span className="pane-title">Diff (A → B)</span>
         </div>
         <div className="pane-body diff-output-body">
           {!showDiff && diffResult.kind === 'parseError' && (
             <div className="parse-error" role="alert">
-              {diffResult.side === 'left' ? 'Left: ' : 'Right: '}{diffResult.message}
+              {diffResult.side === 'left' ? 'A: ' : 'B: '}{diffResult.message}
             </div>
           )}
           {showDiff && diffResult.kind === 'ok' && (
