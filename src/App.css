@@ -338,7 +338,7 @@ body {
 
 .diff-panes {
   display: grid;
-  grid-template-columns: minmax(240px, 30%) 1fr;
+  grid-template-columns: 1fr 2fr;
   grid-template-rows: minmax(0, 1fr) minmax(0, 1fr);
 }
 
