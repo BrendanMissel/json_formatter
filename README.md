@@ -12,35 +12,6 @@ A modern web application for formatting, visualizing, and comparing JSON data. B
 
 To run locally, see [Getting Started](#getting-started).
 
-## Folder Structure
-
-```
-├── index.html                # Entry HTML file
-├── package.json              # Project metadata and dependencies
-├── tsconfig.json             # TypeScript configuration
-├── vite.config.ts            # Vite build config
-├── src/
-│   ├── App.tsx               # Main app component
-│   ├── main.tsx              # App entry point
-│   ├── App.css               # Global styles
-│   ├── types.ts              # Shared TypeScript types
-│   ├── hooks/
-│   │   └── useDebounce.ts    # Debounce hook for input
-│   ├── components/
-│   │   ├── FormattedJsonView.tsx   # Pretty JSON renderer
-│   │   ├── FormattedPane.tsx       # Formatted output pane
-│   │   ├── JsonDiffView.tsx        # JSON diff view
-│   │   ├── JsonTreeView.tsx        # Interactive tree view
-│   │   ├── RawInputPane.tsx        # Raw input pane
-│   │   └── *.test.tsx              # Component tests
-│   ├── utils/
-│   │   ├── diffJson.ts             # JSON diff utility
-│   │   └── diffJson.test.ts        # Utility tests
-│   ├── media/                     # Static assets
-│   └── test/
-│       └── setup.ts               # Test setup
-```
-
 ## Getting Started
 
 ### Prerequisites
