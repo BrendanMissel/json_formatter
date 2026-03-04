@@ -10,15 +10,13 @@ describe('RawInputPane', () => {
     vi.stubGlobal('navigator', {
       clipboard: {
         writeText: vi.fn().mockResolvedValue(undefined),
-        readText: vi.fn().mockResolvedValue(''),
       },
     });
   });
 
-  it('renders Copy, Paste, and Clear buttons', () => {
+  it('renders Copy and Clear buttons', () => {
     render(<RawInputPane rawString="{}" setRawString={setRawString} />);
     expect(screen.getByRole('button', { name: /copy/i })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /paste/i })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /clear/i })).toBeInTheDocument();
   });
 
@@ -37,22 +35,6 @@ describe('RawInputPane', () => {
     await waitFor(() => {
       expect(screen.getByRole('button', { name: 'Copied!' })).toBeInTheDocument();
     });
-  });
-
-  it('Paste reads clipboard and calls setRawString', async () => {
-    const pastedText = '{"pasted": true}';
-    const readText = vi.fn().mockResolvedValue(pastedText);
-    vi.stubGlobal('navigator', { clipboard: { readText, writeText: vi.fn() } });
-
-    render(<RawInputPane rawString="" setRawString={setRawString} />);
-    const pasteBtn = screen.getByRole('button', { name: /paste/i });
-
-    fireEvent.click(pasteBtn);
-
-    await waitFor(() => {
-      expect(readText).toHaveBeenCalled();
-    });
-    expect(setRawString).toHaveBeenCalledWith(pastedText);
   });
 
   it('Clear calls setRawString with empty string', () => {
