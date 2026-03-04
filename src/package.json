@@ -12,7 +12,7 @@
     "preview": "vite preview",
     "test": "vitest",
     "test:run": "vitest run",
-    "lint": "npx eslint src --ext .ts,.tsx"
+    "lint": "npx eslint app --ext .ts,.tsx"
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^7.2.0",
