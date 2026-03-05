@@ -4,7 +4,7 @@ import type { JsonValue, FormatMode, AppMode, TreeEditPath } from './types';
 import RawInputPane from './components/RawInputPane';
 import FormattedPane from './components/FormattedPane';
 import JsonDiffView from './components/JsonDiffView';
-import githubIconUrl from './media/GitHub_Invertocat_White_Clearspace.svg';
+import githubIconUrl from './assets/GitHub_Invertocat_White_Clearspace.svg';
 
 const DEFAULT_RAW = '{\n  "example": true,\n  "count": 42\n}\n';
 const DEBOUNCE_MS = 350;
