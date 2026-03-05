@@ -1,8 +1,10 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useRef, useCallback } from 'react';
 import { diffJsonStrings, tryParseAndNormalize, type DiffLine } from '../utils/diffJson';
+import { readJsonFile } from '../utils/fileDrop';
 
 const DEFAULT_LEFT = '{\n  "name": "foo",\n  "count": 1,\n  "type": "new"\n}';
 const DEFAULT_RIGHT = '{\n  "name": "bar",\n  "count": 1,\n  "active": true\n}';
+const DROP_ERROR_DURATION_MS = 5000;
 
 function DiffLineRow({ line, lineNumber }: { line: DiffLine; lineNumber: number }) {
   if (line.type === 'unchanged') {
@@ -50,6 +52,12 @@ export default function JsonDiffView() {
   const [rightInput, setRightInput] = useState(DEFAULT_RIGHT);
   const [leftCopied, setLeftCopied] = useState(false);
   const [rightCopied, setRightCopied] = useState(false);
+  const [leftDropError, setLeftDropError] = useState<string | null>(null);
+  const [rightDropError, setRightDropError] = useState<string | null>(null);
+  const [leftDragging, setLeftDragging] = useState(false);
+  const [rightDragging, setRightDragging] = useState(false);
+  const leftDropRef = useRef<HTMLDivElement>(null);
+  const rightDropRef = useRef<HTMLDivElement>(null);
 
   const leftParse = useMemo(() => tryParseAndNormalize(leftInput), [leftInput]);
   const rightParse = useMemo(() => tryParseAndNormalize(rightInput), [rightInput]);
@@ -81,6 +89,62 @@ export default function JsonDiffView() {
     }
   };
 
+  const handleLeftDragOver = useCallback((e: React.DragEvent) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'copy';
+    setLeftDragging(true);
+  }, []);
+
+  const handleLeftDragLeave = useCallback((e: React.DragEvent) => {
+    const target = leftDropRef.current;
+    if (target && !target.contains(e.relatedTarget as Node)) {
+      setLeftDragging(false);
+    }
+  }, []);
+
+  const handleLeftDrop = useCallback(async (e: React.DragEvent) => {
+    e.preventDefault();
+    setLeftDragging(false);
+    setLeftDropError(null);
+    const file = e.dataTransfer.files[0];
+    if (!file) return;
+    const result = await readJsonFile(file);
+    if ('content' in result) {
+      setLeftInput(result.content);
+    } else {
+      setLeftDropError(result.error);
+      setTimeout(() => setLeftDropError(null), DROP_ERROR_DURATION_MS);
+    }
+  }, []);
+
+  const handleRightDragOver = useCallback((e: React.DragEvent) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'copy';
+    setRightDragging(true);
+  }, []);
+
+  const handleRightDragLeave = useCallback((e: React.DragEvent) => {
+    const target = rightDropRef.current;
+    if (target && !target.contains(e.relatedTarget as Node)) {
+      setRightDragging(false);
+    }
+  }, []);
+
+  const handleRightDrop = useCallback(async (e: React.DragEvent) => {
+    e.preventDefault();
+    setRightDragging(false);
+    setRightDropError(null);
+    const file = e.dataTransfer.files[0];
+    if (!file) return;
+    const result = await readJsonFile(file);
+    if ('content' in result) {
+      setRightInput(result.content);
+    } else {
+      setRightDropError(result.error);
+      setTimeout(() => setRightDropError(null), DROP_ERROR_DURATION_MS);
+    }
+  }, []);
+
   return (
     <>
       <div className="pane diff-input-pane" aria-label="A Input">
@@ -107,7 +171,20 @@ export default function JsonDiffView() {
             </button>
           </div>
         </div>
-        <div className="pane-body">
+        <div
+          ref={leftDropRef}
+          className={`pane-body ${leftDragging ? 'drag-over' : ''}`}
+          onDragOver={handleLeftDragOver}
+          onDragLeave={handleLeftDragLeave}
+          onDrop={handleLeftDrop}
+          aria-label="A input; drop a .json or .txt file"
+          data-testid="diff-drop-zone-a"
+        >
+          {leftDropError && (
+            <div className="parse-error" role="alert" aria-live="polite">
+              {leftDropError}
+            </div>
+          )}
           {'error' in leftParse && (
             <div className="parse-error" role="alert">{leftParse.error}</div>
           )}
@@ -115,7 +192,10 @@ export default function JsonDiffView() {
             className="raw-textarea"
             placeholder='{"key": "value"}'
             value={leftInput}
-            onChange={(e) => setLeftInput(e.target.value)}
+            onChange={(e) => {
+              setLeftInput(e.target.value);
+              if (leftDropError) setLeftDropError(null);
+            }}
             spellCheck={false}
             aria-label="A Input"
           />
@@ -145,7 +225,20 @@ export default function JsonDiffView() {
             </button>
           </div>
         </div>
-        <div className="pane-body">
+        <div
+          ref={rightDropRef}
+          className={`pane-body ${rightDragging ? 'drag-over' : ''}`}
+          onDragOver={handleRightDragOver}
+          onDragLeave={handleRightDragLeave}
+          onDrop={handleRightDrop}
+          aria-label="B input; drop a .json or .txt file"
+          data-testid="diff-drop-zone-b"
+        >
+          {rightDropError && (
+            <div className="parse-error" role="alert" aria-live="polite">
+              {rightDropError}
+            </div>
+          )}
           {'error' in rightParse && (
             <div className="parse-error" role="alert">{rightParse.error}</div>
           )}
@@ -153,7 +246,10 @@ export default function JsonDiffView() {
             className="raw-textarea"
             placeholder='{"key": "value"}'
             value={rightInput}
-            onChange={(e) => setRightInput(e.target.value)}
+            onChange={(e) => {
+              setRightInput(e.target.value);
+              if (rightDropError) setRightDropError(null);
+            }}
             spellCheck={false}
             aria-label="B Input"
           />

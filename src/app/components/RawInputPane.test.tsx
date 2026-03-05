@@ -45,4 +45,45 @@ describe('RawInputPane', () => {
 
     expect(setRawString).toHaveBeenCalledWith('');
   });
+
+  it('dropping a valid JSON file calls setRawString with file content', async () => {
+    const content = '{"a": 1, "b": 2}';
+    const file = new File([content], 'data.json', { type: 'application/json' });
+    render(<RawInputPane rawString="" setRawString={setRawString} />);
+    const dropZone = screen.getByTestId('raw-input-drop-zone');
+
+    fireEvent.drop(dropZone, { dataTransfer: { files: [file] } });
+
+    await waitFor(() => {
+      expect(setRawString).toHaveBeenCalledWith(content);
+    });
+  });
+
+  it('dropping an unsupported file type shows error and does not call setRawString', async () => {
+    const file = new File(['{"a": 1}'], 'data.csv', { type: 'text/csv' });
+    render(<RawInputPane rawString="" setRawString={setRawString} />);
+    const dropZone = screen.getByTestId('raw-input-drop-zone');
+
+    fireEvent.drop(dropZone, { dataTransfer: { files: [file] } });
+
+    await waitFor(() => {
+      expect(screen.getByRole('alert')).toHaveTextContent(/Unsupported file type/);
+    });
+    expect(setRawString).not.toHaveBeenCalled();
+  });
+
+  it('dropping a .json file with invalid JSON shows error and does not call setRawString', async () => {
+    const file = new File(['{ invalid }'], 'data.json', {
+      type: 'application/json'
+    });
+    render(<RawInputPane rawString="" setRawString={setRawString} />);
+    const dropZone = screen.getByTestId('raw-input-drop-zone');
+
+    fireEvent.drop(dropZone, { dataTransfer: { files: [file] } });
+
+    await waitFor(() => {
+      expect(screen.getByRole('alert')).toHaveTextContent(/Invalid JSON/);
+    });
+    expect(setRawString).not.toHaveBeenCalled();
+  });
 });

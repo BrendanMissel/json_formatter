@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import JsonDiffView from './JsonDiffView';
 
 describe('JsonDiffView', () => {
@@ -97,5 +97,51 @@ describe('JsonDiffView', () => {
     const alerts = screen.getAllByRole('alert');
     expect(alerts.length).toBeGreaterThanOrEqual(1);
     expect(alerts.some((el) => el.textContent?.includes('Expected property name'))).toBe(true);
+  });
+
+  it('dropping a valid JSON file on pane A updates the A input', async () => {
+    const content = '{"left": true}';
+    const file = new File([content], 'a.json', { type: 'application/json' });
+    render(<JsonDiffView />);
+    const dropZoneA = screen.getByTestId('diff-drop-zone-a');
+    const leftInput = screen.getByRole('textbox', { name: /A Input/i });
+
+    fireEvent.drop(dropZoneA, { dataTransfer: { files: [file] } });
+
+    await waitFor(() => {
+      expect(leftInput).toHaveValue(content);
+    });
+  });
+
+  it('dropping a valid JSON file on pane B updates the B input', async () => {
+    const content = '{"right": true}';
+    const file = new File([content], 'b.json', { type: 'application/json' });
+    render(<JsonDiffView />);
+    const dropZoneB = screen.getByTestId('diff-drop-zone-b');
+    const rightInput = screen.getByRole('textbox', { name: /B Input/i });
+
+    fireEvent.drop(dropZoneB, { dataTransfer: { files: [file] } });
+
+    await waitFor(() => {
+      expect(rightInput).toHaveValue(content);
+    });
+  });
+
+  it('dropping an invalid file on pane A shows error and does not change A input', async () => {
+    const file = new File(['{ invalid }'], 'bad.json', {
+      type: 'application/json'
+    });
+    render(<JsonDiffView />);
+    const dropZoneA = screen.getByTestId('diff-drop-zone-a');
+    const leftInput = screen.getByRole('textbox', { name: /A Input/i });
+    const initialValue = leftInput.value;
+
+    fireEvent.drop(dropZoneA, { dataTransfer: { files: [file] } });
+
+    await waitFor(() => {
+      const alerts = screen.getAllByRole('alert');
+      expect(alerts.some((el) => el.textContent?.includes('Invalid JSON'))).toBe(true);
+    });
+    expect(leftInput).toHaveValue(initialValue);
   });
 });
