@@ -134,7 +134,7 @@ describe('JsonDiffView', () => {
     render(<JsonDiffView />);
     const dropZoneA = screen.getByTestId('diff-drop-zone-a');
     const leftInput = screen.getByRole('textbox', { name: /A Input/i });
-    const initialValue = leftInput.value;
+    const initialValue = leftInput.textContent;
 
     fireEvent.drop(dropZoneA, { dataTransfer: { files: [file] } });
 
