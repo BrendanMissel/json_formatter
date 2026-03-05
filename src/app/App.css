@@ -176,6 +176,12 @@ body {
   overflow: auto;
 }
 
+.pane-body.drag-over {
+  outline: 2px dashed #444;
+  outline-offset: -2px;
+  background: #222;
+}
+
 .raw-textarea {
   width: 100%;
   height: 100%;
