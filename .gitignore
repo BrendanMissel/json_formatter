@@ -7,3 +7,5 @@ dist
 .env.production.local
 tsconfig.tsbuildinfo
 .vite
+
+.DS_Store
