@@ -6,7 +6,7 @@ import FormattedPane from './components/FormattedPane';
 import JsonDiffView, { DEFAULT_LEFT as DIFF_DEFAULT_LEFT, DEFAULT_RIGHT as DIFF_DEFAULT_RIGHT } from './components/JsonDiffView';
 import githubIconUrl from './assets/GitHub_Invertocat_White_Clearspace.svg';
 
-const DEFAULT_RAW = '{\n  "example": true,\n  "count": 42\n}\n';
+const DEFAULT_RAW = '{"example": true,"count": 42}\n';
 const DEBOUNCE_MS = 350;
 const TABPANEL_ID = 'app-tabpanel';
 
@@ -372,6 +372,7 @@ export default function App() {
             aria-label="View repository on GitHub"
             className="github-link"
           >
+            <h6>View Source</h6>
             <img src={githubIconUrl} alt="" width={24} height={24} aria-hidden="true" />
           </a>
         </div>
