@@ -3,7 +3,7 @@ import { useDebounce } from './hooks/useDebounce';
 import type { JsonValue, FormatMode, AppMode, TreeEditPath } from './types';
 import RawInputPane from './components/RawInputPane';
 import FormattedPane from './components/FormattedPane';
-import JsonDiffView from './components/JsonDiffView';
+import JsonDiffView, { DEFAULT_LEFT as DIFF_DEFAULT_LEFT, DEFAULT_RIGHT as DIFF_DEFAULT_RIGHT } from './components/JsonDiffView';
 import githubIconUrl from './assets/GitHub_Invertocat_White_Clearspace.svg';
 
 const DEFAULT_RAW = '{\n  "example": true,\n  "count": 42\n}\n';
@@ -44,6 +44,8 @@ export default function App() {
   const [parsed, setParsed] = useState<JsonValue | null>(null);
   const [parseError, setParseError] = useState<string | null>(null);
   const [formatMode, setFormatMode] = useState<FormatMode>('formatted');
+  const [diffLeftInput, setDiffLeftInput] = useState(DIFF_DEFAULT_LEFT);
+  const [diffRightInput, setDiffRightInput] = useState(DIFF_DEFAULT_RIGHT);
 
   const debouncedRaw = useDebounce(rawString, DEBOUNCE_MS);
 
@@ -125,7 +127,12 @@ export default function App() {
       )}
       {appMode === 'diff' && (
         <div className="panes diff-panes" id="diff-panel" role="tabpanel" aria-labelledby="diff-tab">
-          <JsonDiffView />
+          <JsonDiffView
+            leftInput={diffLeftInput}
+            setLeftInput={setDiffLeftInput}
+            rightInput={diffRightInput}
+            setRightInput={setDiffRightInput}
+          />
         </div>
       )}
     </div>

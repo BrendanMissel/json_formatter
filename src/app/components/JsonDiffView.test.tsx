@@ -1,6 +1,20 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import JsonDiffView from './JsonDiffView';
+import { useState } from 'react';
+import JsonDiffView, { DEFAULT_LEFT, DEFAULT_RIGHT } from './JsonDiffView';
+
+function JsonDiffViewWrapper() {
+  const [leftInput, setLeftInput] = useState(DEFAULT_LEFT);
+  const [rightInput, setRightInput] = useState(DEFAULT_RIGHT);
+  return (
+    <JsonDiffView
+      leftInput={leftInput}
+      setLeftInput={setLeftInput}
+      rightInput={rightInput}
+      setRightInput={setRightInput}
+    />
+  );
+}
 
 describe('JsonDiffView', () => {
   beforeEach(() => {
@@ -12,7 +26,7 @@ describe('JsonDiffView', () => {
   });
 
   it('renders Copy and Clear buttons for A and B', () => {
-    render(<JsonDiffView />);
+    render(<JsonDiffViewWrapper />);
     const copyButtons = screen.getAllByRole('button', { name: /copy/i });
     const clearButtons = screen.getAllByRole('button', { name: /clear/i });
     expect(copyButtons).toHaveLength(2);
@@ -20,7 +34,7 @@ describe('JsonDiffView', () => {
   });
 
   it('Clear in A clears the A textarea', () => {
-    render(<JsonDiffView />);
+    render(<JsonDiffViewWrapper />);
     const jsonAInput = screen.getByRole('textbox', { name: /A Input/i });
     const clearButtons = screen.getAllByRole('button', { name: /clear/i });
 
@@ -30,7 +44,7 @@ describe('JsonDiffView', () => {
   });
 
   it('Clear in B clears the B textarea', () => {
-    render(<JsonDiffView />);
+    render(<JsonDiffViewWrapper />);
     const jsonBInput = screen.getByRole('textbox', { name: /B Input/i });
     const clearButtons = screen.getAllByRole('button', { name: /clear/i });
 
@@ -40,18 +54,18 @@ describe('JsonDiffView', () => {
   });
 
   it('renders A and B input areas', () => {
-    render(<JsonDiffView />);
+    render(<JsonDiffViewWrapper />);
     expect(screen.getByRole('textbox', { name: /A Input/i })).toBeInTheDocument();
     expect(screen.getByRole('textbox', { name: /B Input/i })).toBeInTheDocument();
   });
 
   it('renders diff output region', () => {
-    render(<JsonDiffView />);
+    render(<JsonDiffViewWrapper />);
     expect(screen.getByRole('region', { name: /JSON diff result/i })).toBeInTheDocument();
   });
 
   it('shows diff output when both inputs are valid and different', () => {
-    render(<JsonDiffView />);
+    render(<JsonDiffViewWrapper />);
     const leftInput = screen.getByRole('textbox', { name: /A Input/i });
     const rightInput = screen.getByRole('textbox', { name: /B Input/i });
     fireEvent.change(leftInput, { target: { value: '{"a": 1}' } });
@@ -65,7 +79,7 @@ describe('JsonDiffView', () => {
   });
 
   it('shows same key different value on one row with both sides highlighted', () => {
-    render(<JsonDiffView />);
+    render(<JsonDiffViewWrapper />);
     const leftInput = screen.getByRole('textbox', { name: /A Input/i });
     const rightInput = screen.getByRole('textbox', { name: /B Input/i });
     fireEvent.change(leftInput, { target: { value: '{"name": "foo", "id": 1}' } });
@@ -78,7 +92,7 @@ describe('JsonDiffView', () => {
   });
 
   it('shows only unchanged lines when both inputs are the same', () => {
-    render(<JsonDiffView />);
+    render(<JsonDiffViewWrapper />);
     const leftInput = screen.getByRole('textbox', { name: /A Input/i });
     const rightInput = screen.getByRole('textbox', { name: /B Input/i });
     const same = '{"x": 1}';
@@ -91,7 +105,7 @@ describe('JsonDiffView', () => {
   });
 
   it('shows parse error when left JSON is invalid', () => {
-    render(<JsonDiffView />);
+    render(<JsonDiffViewWrapper />);
     const leftInput = screen.getByRole('textbox', { name: /A Input/i });
     fireEvent.change(leftInput, { target: { value: '{ invalid }' } });
     const alerts = screen.getAllByRole('alert');
@@ -102,7 +116,7 @@ describe('JsonDiffView', () => {
   it('dropping a valid JSON file on pane A updates the A input', async () => {
     const content = '{"left": true}';
     const file = new File([content], 'a.json', { type: 'application/json' });
-    render(<JsonDiffView />);
+    render(<JsonDiffViewWrapper />);
     const dropZoneA = screen.getByTestId('diff-drop-zone-a');
     const leftInput = screen.getByRole('textbox', { name: /A Input/i });
 
@@ -116,7 +130,7 @@ describe('JsonDiffView', () => {
   it('dropping a valid JSON file on pane B updates the B input', async () => {
     const content = '{"right": true}';
     const file = new File([content], 'b.json', { type: 'application/json' });
-    render(<JsonDiffView />);
+    render(<JsonDiffViewWrapper />);
     const dropZoneB = screen.getByTestId('diff-drop-zone-b');
     const rightInput = screen.getByRole('textbox', { name: /B Input/i });
 
@@ -131,10 +145,10 @@ describe('JsonDiffView', () => {
     const file = new File(['{ invalid }'], 'bad.json', {
       type: 'application/json'
     });
-    render(<JsonDiffView />);
+    render(<JsonDiffViewWrapper />);
     const dropZoneA = screen.getByTestId('diff-drop-zone-a');
     const leftInput = screen.getByRole('textbox', { name: /A Input/i });
-    const initialValue = leftInput.textContent;
+    const initialValue = (leftInput as HTMLTextAreaElement).value;
 
     fireEvent.drop(dropZoneA, { dataTransfer: { files: [file] } });
 
