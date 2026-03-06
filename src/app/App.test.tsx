@@ -51,4 +51,35 @@ describe('App', () => {
     expect(diffAAgain).toHaveValue(diffAContent);
     expect(diffBAgain).toHaveValue(diffBContent);
   });
+
+  it('can add a new Format tab via the add menu', () => {
+    render(<App />);
+    const addButton = screen.getByRole('button', { name: /add tab/i });
+    fireEvent.click(addButton);
+    const addFormatItem = screen.getByRole('menuitem', { name: /add format tab/i });
+    fireEvent.click(addFormatItem);
+    const formatTabs = screen.getAllByRole('tab', { name: /^Format/ });
+    expect(formatTabs.length).toBe(2);
+    expect(screen.getByRole('tab', { name: 'Format 2' })).toBeInTheDocument();
+  });
+
+  it('can rename a Format tab via the edit button', () => {
+    render(<App />);
+    const renameButton = screen.getByLabelText(/rename format/i);
+    fireEvent.click(renameButton);
+    const input = screen.getByRole('textbox', { name: /rename tab/i });
+    fireEvent.change(input, { target: { value: 'My Config' } });
+    fireEvent.keyDown(input, { key: 'Enter' });
+    expect(screen.getByRole('tab', { name: 'My Config' })).toBeInTheDocument();
+  });
+
+  it('can close a tab and another tab is selected', () => {
+    render(<App />);
+    const diffTab = screen.getByRole('tab', { name: 'Diff' });
+    fireEvent.click(diffTab);
+    const closeDiffButton = screen.getByLabelText(/close diff/i);
+    fireEvent.click(closeDiffButton);
+    expect(screen.queryByRole('tab', { name: 'Diff' })).not.toBeInTheDocument();
+    expect(screen.getByRole('tab', { name: 'Format' })).toHaveAttribute('aria-selected', 'true');
+  });
 });
