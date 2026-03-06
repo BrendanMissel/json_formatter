@@ -205,6 +205,22 @@ body {
   cursor: pointer;
   text-decoration: none;
 }
+.github-link h6 {
+  margin: 0;
+  opacity: 0;
+  transform: translateX(20px);
+  transition: opacity 0.3s cubic-bezier(0.4,0,0.2,1), transform 0.3s cubic-bezier(0.4,0,0.2,1);
+  pointer-events: none;
+}
+.github-link:hover h6 {
+  opacity: 1;
+  transform: translateX(0);
+  pointer-events: auto;
+}
+
+.github-link h6 {
+  margin: 0;
+}
 
 .github-link:hover {
   color: #fff;
