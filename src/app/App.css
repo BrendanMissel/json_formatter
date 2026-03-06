@@ -28,7 +28,8 @@ body {
   border-bottom: 1px solid #333;
   font-weight: 600;
   font-size: 1rem;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
+  min-width: 0;
 }
 
 .app-header-title {
@@ -41,18 +42,19 @@ body {
   gap: 0;
   border: 1px solid #444;
   border-radius: 4px;
-  overflow: visible;
-  flex-wrap: nowrap;
+  flex: 1 1 0;
   min-width: 0;
-  max-width: 100%;
+  overflow: visible;
 }
 
-@media (max-width: 600px) {
-  .app-tabs {
-    overflow-x: auto;
-    overflow-y: visible;
-    -webkit-overflow-scrolling: touch;
-  }
+.app-tabs-scroll {
+  display: flex;
+  align-items: stretch;
+  flex: 1 1 0;
+  min-width: 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
 }
 
 .app-tab {

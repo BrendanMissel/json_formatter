@@ -270,7 +270,8 @@ export default function App() {
       <header className="app-header">
         <span className="app-header-title">JSON Tools</span>
         <div className="app-tabs" role="tablist" aria-label="Tabs">
-          {tabs.map((tab) => (
+          <div className="app-tabs-scroll">
+            {tabs.map((tab) => (
             <div
               key={tab.id}
               role="presentation"
@@ -330,7 +331,8 @@ export default function App() {
                 </button>
               )}
             </div>
-          ))}
+            ))}
+          </div>
           <div className="app-tab-add-wrap" ref={addMenuRef}>
             <button
               type="button"
