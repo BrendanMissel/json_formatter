@@ -2,9 +2,16 @@ import { useState, useMemo, useRef, useCallback } from 'react';
 import { diffJsonStrings, tryParseAndNormalize, type DiffLine } from '../utils/diffJson';
 import { readJsonFile } from '../utils/fileDrop';
 
-const DEFAULT_LEFT = '{\n  "name": "foo",\n  "count": 1,\n  "type": "new"\n}';
-const DEFAULT_RIGHT = '{\n  "name": "bar",\n  "count": 1,\n  "active": true\n}';
+export const DEFAULT_LEFT = '{\n  "name": "foo",\n  "count": 1,\n  "type": "new"\n}';
+export const DEFAULT_RIGHT = '{\n  "name": "bar",\n  "count": 1,\n  "active": true\n}';
 const DROP_ERROR_DURATION_MS = 5000;
+
+export type JsonDiffViewProps = {
+  leftInput: string;
+  setLeftInput: (s: string) => void;
+  rightInput: string;
+  setRightInput: (s: string) => void;
+};
 
 function DiffLineRow({ line, lineNumber }: { line: DiffLine; lineNumber: number }) {
   if (line.type === 'unchanged') {
@@ -47,9 +54,12 @@ function DiffLineRow({ line, lineNumber }: { line: DiffLine; lineNumber: number 
   );
 }
 
-export default function JsonDiffView() {
-  const [leftInput, setLeftInput] = useState(DEFAULT_LEFT);
-  const [rightInput, setRightInput] = useState(DEFAULT_RIGHT);
+export default function JsonDiffView({
+  leftInput,
+  setLeftInput,
+  rightInput,
+  setRightInput,
+}: JsonDiffViewProps) {
   const [leftCopied, setLeftCopied] = useState(false);
   const [rightCopied, setRightCopied] = useState(false);
   const [leftDropError, setLeftDropError] = useState<string | null>(null);
@@ -115,7 +125,7 @@ export default function JsonDiffView() {
       setLeftDropError(result.error);
       setTimeout(() => setLeftDropError(null), DROP_ERROR_DURATION_MS);
     }
-  }, []);
+  }, [setLeftInput]);
 
   const handleRightDragOver = useCallback((e: React.DragEvent) => {
     e.preventDefault();
@@ -143,7 +153,7 @@ export default function JsonDiffView() {
       setRightDropError(result.error);
       setTimeout(() => setRightDropError(null), DROP_ERROR_DURATION_MS);
     }
-  }, []);
+  }, [setRightInput]);
 
   return (
     <>
