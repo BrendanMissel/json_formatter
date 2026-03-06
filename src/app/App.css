@@ -42,7 +42,7 @@ body {
   gap: 0;
   border: 1px solid #444;
   border-radius: 4px;
-  flex: 1 1 0;
+  flex: 0 1 auto;
   min-width: 0;
   overflow: visible;
 }
@@ -50,7 +50,7 @@ body {
 .app-tabs-scroll {
   display: flex;
   align-items: stretch;
-  flex: 1 1 0;
+  flex: 0 1 auto;
   min-width: 0;
   overflow-x: auto;
   overflow-y: hidden;
