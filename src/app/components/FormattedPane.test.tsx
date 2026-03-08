@@ -91,7 +91,8 @@ describe('FormattedPane', () => {
     await userEvent.click(saveBtn);
 
     expect(createObjectURL).toHaveBeenCalledWith(expect.any(Blob));
-    const blob = createObjectURL.mock.calls[0][0] as Blob;
+    const calls = createObjectURL.mock.calls as unknown as [Blob][];
+    const blob = calls[0][0];
     expect(blob.type).toBe('application/json');
     expect(await blob.text()).toBe(JSON.stringify({ foo: 1 }, null, 2));
     expect(revokeObjectURL).toHaveBeenCalledWith(mockUrl);
