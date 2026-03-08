@@ -397,6 +397,7 @@ export default function App() {
                 formatMode={activeFormatState.formatMode}
                 setFormatMode={setActiveFormatMode}
                 onTreeEdit={onTreeEdit}
+                tabName={activeTab.name}
               />
             </>
           )}
