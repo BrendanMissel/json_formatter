@@ -1,5 +1,6 @@
 import { useEffect, useState, useCallback, useRef } from 'react';
 import { useDebounce } from './hooks/useDebounce';
+import { useBeforeUnload } from './hooks/useBeforeUnload';
 import type { JsonValue, FormatMode, TreeEditPath, TabItem, FormatTabState, DiffTabState } from './types';
 import RawInputPane from './components/RawInputPane';
 import FormattedPane from './components/FormattedPane';
@@ -100,6 +101,13 @@ export default function App() {
   const activeTab = tabs.find((t) => t.id === activeTabId) ?? tabs[0];
   const activeFormatState = activeTab?.type === 'format' ? formatState[activeTab.id] : undefined;
   const debouncedRaw = useDebounce(activeFormatState?.rawString ?? '', DEBOUNCE_MS);
+
+  const hasUnsavedProgress =
+    Object.values(formatState).some((s) => s.rawString !== DEFAULT_RAW) ||
+    Object.values(diffState).some(
+      (s) => s.leftInput !== DIFF_DEFAULT_LEFT || s.rightInput !== DIFF_DEFAULT_RIGHT
+    );
+  useBeforeUnload(hasUnsavedProgress);
 
   useEffect(() => {
     if (activeTab?.type !== 'format' || !activeTab) return;
