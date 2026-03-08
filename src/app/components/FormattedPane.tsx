@@ -3,12 +3,20 @@ import type { JsonValue, FormatMode, TreeEditPath } from '../types';
 import FormattedJsonView from './FormattedJsonView';
 import JsonTreeView from './JsonTreeView';
 
+function fileNameFromTabName(tabName: string): string {
+  const invalid = /[\\/:*?"<>|]/g;
+  const sanitized = (tabName ?? '').trim().replace(invalid, '').trim();
+  const base = sanitized || 'format';
+  return base.toLowerCase().endsWith('.json') ? base : `${base}.json`;
+}
+
 type FormattedPaneProps = {
   parsed: JsonValue | null
   parseError: string | null
   formatMode: FormatMode
   setFormatMode: (m: FormatMode) => void
   onTreeEdit: (path: TreeEditPath, value: JsonValue) => void
+  tabName?: string
 }
 
 export default function FormattedPane({
@@ -17,6 +25,7 @@ export default function FormattedPane({
   formatMode,
   setFormatMode,
   onTreeEdit,
+  tabName,
 }: FormattedPaneProps) {
   const [copied, setCopied] = useState(false);
 
@@ -30,6 +39,17 @@ export default function FormattedPane({
     } catch {
       // ignore
     }
+  };
+
+  const handleSave = () => {
+    const filename = fileNameFromTabName(tabName ?? '');
+    const blob = new Blob([formattedString], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    a.click();
+    URL.revokeObjectURL(url);
   };
 
   return (
@@ -53,6 +73,16 @@ export default function FormattedPane({
               Tree view
             </button>
           </div>
+          <button
+            type="button"
+            className="pane-action-btn save-btn"
+            onClick={handleSave}
+            disabled={parsed === null}
+            aria-label="Save"
+            title="Save"
+          >
+            <i className="fa-solid fa-floppy-disk" aria-hidden="true" />
+          </button>
           <button
             type="button"
             className={`pane-action-btn copy-btn ${copied ? 'copied' : ''}`}
