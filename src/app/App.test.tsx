@@ -1,5 +1,5 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { render, screen, fireEvent, within } from '@testing-library/react';
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
+import { render, screen, fireEvent, within, waitFor } from '@testing-library/react';
 import App from './App';
 
 describe('App', () => {
@@ -8,6 +8,43 @@ describe('App', () => {
       clipboard: {
         writeText: vi.fn().mockResolvedValue(undefined),
       },
+    });
+  });
+
+  describe('unsaved progress / beforeunload', () => {
+    afterEach(() => {
+      vi.restoreAllMocks();
+    });
+
+    it('does not add beforeunload listener when state is default', () => {
+      const addSpy = vi.spyOn(window, 'addEventListener');
+      render(<App />);
+      const beforeunloadCalls = addSpy.mock.calls.filter((c) => c[0] === 'beforeunload');
+      expect(beforeunloadCalls).toHaveLength(0);
+    });
+
+    it('adds beforeunload listener when format tab has non-default input', async () => {
+      const addSpy = vi.spyOn(window, 'addEventListener');
+      render(<App />);
+      const formatPanel = screen.getByRole('tabpanel', { name: 'Format' });
+      const formatInput = within(formatPanel).getByRole('textbox');
+      fireEvent.change(formatInput, { target: { value: '{"custom": true}' } });
+      await waitFor(() => {
+        const beforeunloadCalls = addSpy.mock.calls.filter((c) => c[0] === 'beforeunload');
+        expect(beforeunloadCalls.length).toBeGreaterThanOrEqual(1);
+      });
+    });
+
+    it('adds beforeunload listener when diff tab has non-default input', async () => {
+      const addSpy = vi.spyOn(window, 'addEventListener');
+      render(<App />);
+      fireEvent.click(screen.getByRole('tab', { name: 'Diff' }));
+      const diffA = screen.getByRole('textbox', { name: /A Input/i });
+      fireEvent.change(diffA, { target: { value: '{"different": 1}' } });
+      await waitFor(() => {
+        const beforeunloadCalls = addSpy.mock.calls.filter((c) => c[0] === 'beforeunload');
+        expect(beforeunloadCalls.length).toBeGreaterThanOrEqual(1);
+      });
     });
   });
 
